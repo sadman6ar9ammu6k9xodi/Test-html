@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mahbubu Ullash | Developer Portfolio</title>
+  <title>CYBER ☢️ TEAM | Developer Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -10,9 +10,10 @@
       font-family: 'Roboto', sans-serif;
       transition: background 0.3s, color 0.3s;
       overflow-x: hidden;
+      background-color: #0d0d0d;
     }
     .dark-mode {
-      background: #121212;
+      background-color: #0d0d0d;
       color: #fff;
     }
     .bg-animation {
@@ -22,9 +23,10 @@
       width: 100vw;
       height: 100vh;
       z-index: -1;
-      background: radial-gradient(#00f2ff33 1px, transparent 1px);
-      background-size: 50px 50px;
-      animation: moveBg 20s linear infinite;
+      background: radial-gradient(#00f2ff55 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: moveBg 30s linear infinite;
+      opacity: 0.4;
     }
     @keyframes moveBg {
       from { background-position: 0 0; }
@@ -35,6 +37,7 @@
       justify-content: space-between;
       padding: 1rem;
       align-items: center;
+      background: transparent;
     }
     .toggle-dark {
       background: #0077cc;
@@ -75,6 +78,7 @@
       text-decoration: none;
       display: inline-block;
       margin: 1rem 0;
+      box-shadow: 0 0 10px #00aaff;
     }
     .video {
       display: block;
@@ -92,7 +96,7 @@
       color: #0077cc;
       font-weight: bold;
     }
-    .about, .subscribe, .projects {
+    .about, .projects {
       max-width: 600px;
       margin: 2rem auto;
       padding: 1rem;
@@ -100,23 +104,8 @@
       border-radius: 10px;
     }
     .dark-mode .about,
-    .dark-mode .subscribe,
     .dark-mode .projects {
       background: rgba(40,40,40,0.8);
-    }
-    .subscribe input {
-      padding: 0.5rem;
-      width: 70%;
-      margin-right: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .subscribe button {
-      padding: 0.5rem 1rem;
-      background: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
     }
     .status {
       display: inline-block;
@@ -127,12 +116,41 @@
       color: white;
       font-size: 0.8rem;
     }
+    .skills {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .skills span {
+      display: inline-block;
+      background: #00aaff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      margin: 0.2rem;
+    }
+    .youtube-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #FF0000;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 2rem auto;
+      width: fit-content;
+    }
+    .youtube-btn img {
+      width: 20px;
+      margin-right: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="bg-animation"></div>
   <header>
-    <h2>Mahbubu Ullash</h2>
+    <h2>—͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️</h2>
     <button class="toggle-dark" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   </header>  <div class="card">
     <img src="https://i.imgur.com/lErbLcI.jpeg" alt="Mahbubu Ullash">
@@ -149,11 +167,18 @@
   </div>  <div class="about">
     <h3>🧑‍💻 About Me</h3>
     <p>I am Mahbubu Ullash, a passionate bot developer and tech enthusiast from Bangladesh. I build intelligent Telegram and Messenger bots and love automation.</p>
-  </div>  <div class="subscribe">
-    <h3>📧 Subscribe to get updates</h3>
-    <input type="email" placeholder="Enter your email">
-    <button>Subscribe</button>
-  </div>  <script>
+  </div>  <div class="skills">
+    <h3>🚀 Skills</h3>
+    <span>JavaScript</span>
+    <span>Node.js</span>
+    <span>Python</span>
+    <span>Telegram Bot</span>
+    <span>Messenger Bot</span>
+    <span>HTML/CSS</span>
+    <span>MongoDB</span>
+  </div>  <a class="youtube-btn" href="https://youtube.com/@cyberbotcommunity?si=rBkcI2LBgBkkDeEY" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube" /> Subscribe My Channel
+  </a>  <script>
     const texts = ["Developer", "Bot Maker", "Technology Enthusiast"];
     let i = 0, j = 0, isDeleting = false;
 

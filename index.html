@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>বাউন্সিং বল এনিমেশন</title>
+  <title>এলোপাথাড়ি বল ও কেন্দ্রীয় রেখা</title>
   <style>
     body {
       margin: 0;
@@ -16,7 +16,7 @@
     canvas {
       background: #111;
       border-radius: 50%;
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
     }
   </style>
 </head>
@@ -34,9 +34,9 @@
     let ball = {
       x: center.x,
       y: center.y,
-      vx: 2.5,
-      vy: 2,
-      r: 5
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 0.5) * 6,
+      r: 6
     };
 
     let lines = [];
@@ -50,7 +50,7 @@
       ctx.beginPath();
       ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
       ctx.strokeStyle = "#333";
-      ctx.lineWidth = 5;
+      ctx.lineWidth = 4;
       ctx.stroke();
     }
 
@@ -77,25 +77,27 @@
         ball.vx -= 2 * dot * normX;
         ball.vy -= 2 * dot * normY;
 
-        // Add a line from center to contact point
+        // Add new line from wall to ball position
         lines.push({
-          x: ball.x,
-          y: ball.y,
+          fromX: ball.x,
+          fromY: ball.y,
+          toX: ball.x,  // সব রেখা বলের বর্তমান অবস্থানে যাবে
+          toY: ball.y,
           color: getRandomColor()
         });
 
-        // Optional: limit number of lines
-        if (lines.length > 50) lines.shift();
+        // Keep last 80 lines
+        if (lines.length > 80) lines.shift();
       }
     }
 
     function drawLines() {
       for (let line of lines) {
         ctx.beginPath();
-        ctx.moveTo(center.x, center.y);
-        ctx.lineTo(line.x, line.y);
+        ctx.moveTo(line.fromX, line.fromY);
+        ctx.lineTo(ball.x, ball.y); // সব লাইন বলের বর্তমান অবস্থানে এসে মিলবে
         ctx.strokeStyle = line.color;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 3.5; // মোটা রেখা
         ctx.stroke();
       }
     }

@@ -27,25 +27,31 @@
       background: var(--bg-color);
       color: var(--text-color);
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
+      align-items: center;
       min-height: 100vh;
       transition: all 0.5s ease;
     }
 
-    .links {
-      margin-top: 20px;
-      text-align: center;
+    .top-bar {
+      width: 100%;
+      text-align: right;
+      padding: 10px 20px;
     }
 
-    .links a {
-      margin: 0 15px;
-      text-decoration: none;
-      font-size: 18px;
-      color: var(--link-color);
-      font-weight: bold;
-      transition: color 0.3s;
+    .mode-toggle {
+      background: transparent;
+      border: 2px solid var(--button-bg);
+      padding: 5px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      color: var(--button-bg);
+      transition: all 0.3s ease;
+    }
+
+    .mode-toggle:hover {
+      background-color: var(--button-bg);
+      color: white;
     }
 
     .card {
@@ -55,7 +61,7 @@
       text-align: center;
       max-width: 320px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      margin-top: 20px;
+      margin-top: 10px;
       animation: fadeIn 1.5s ease;
     }
 
@@ -77,23 +83,25 @@
       font-size: 14px;
     }
 
-    .card button {
+    .card a.button {
       padding: 10px 20px;
       border: none;
       border-radius: 25px;
       background-color: var(--button-bg);
       color: white;
       font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 10px;
     }
 
-    .card button:hover {
-      background-color: #1f6fa5;
+    #clock {
+      font-size: 16px;
+      margin-bottom: 10px;
     }
 
     .video-container {
-      margin-top: 30px;
+      margin-top: 20px;
       width: 90%;
       max-width: 500px;
     }
@@ -104,27 +112,18 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
-    #clock {
-      margin-top: 20px;
+    .links {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .links a {
+      margin: 0 15px;
+      text-decoration: none;
       font-size: 18px;
+      color: var(--link-color);
       font-weight: bold;
-      animation: fadeIn 2s ease;
-    }
-
-    .mode-toggle {
-      margin-top: 15px;
-      background: transparent;
-      border: 2px solid var(--button-bg);
-      padding: 5px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      color: var(--button-bg);
-      transition: all 0.3s ease;
-    }
-
-    .mode-toggle:hover {
-      background-color: var(--button-bg);
-      color: white;
+      transition: color 0.3s;
     }
 
     @keyframes fadeIn {
@@ -135,19 +134,16 @@
 </head>
 <body>
 
-  <div class="links">
-    <a href="https://www.facebook.com/share/16mA3zxsrM/" target="_blank">Facebook</a>
-    <a href="https://github.com/cyber-ullash" target="_blank">GitHub</a>
-    <a href="https://t.me/The_morning_star71" target="_blank">Telegram</a>
+  <div class="top-bar">
+    <button class="mode-toggle" onclick="toggleMode()">🌙 Toggle Dark Mode</button>
   </div>
 
   <div class="card">
     <img src="https://i.imgur.com/lErbLcI.jpeg" alt="MAHBUBU ULLASH" />
     <h2>MAHBUBU ULLASH</h2>
     <p>Developer | Bot Maker | Technology Enthusiast</p>
-    <button>Contact Me</button>
+    <a class="button" href="https://m.me/61558029693194" target="_blank">Contact Me</a>
     <div id="clock"></div>
-    <button class="mode-toggle" onclick="toggleMode()">🌙 Toggle Dark Mode</button>
   </div>
 
   <div class="video-container">
@@ -155,6 +151,12 @@
       <source src="https://files.catbox.moe/oq9wm9.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
+  </div>
+
+  <div class="links">
+    <a href="https://www.facebook.com/share/16mA3zxsrM/" target="_blank">Facebook</a>
+    <a href="https://github.com/cyber-ullash" target="_blank">GitHub</a>
+    <a href="https://t.me/The_morning_star71" target="_blank">Telegram</a>
   </div>
 
   <script>
@@ -176,7 +178,6 @@
       document.documentElement.setAttribute("data-theme", currentTheme === "dark" ? "light" : "dark");
     }
 
-    // Default to light mode
     document.documentElement.setAttribute("data-theme", "light");
   </script>
 

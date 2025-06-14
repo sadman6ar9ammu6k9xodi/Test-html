@@ -50,6 +50,17 @@ function drawBall() {
   ctx.fill();
 }
 
+function drawLines() {
+  lines.forEach(line => {
+    ctx.beginPath();
+    ctx.moveTo(line.ox, line.oy);
+    ctx.lineTo(line.tx, line.ty);
+    ctx.strokeStyle = line.color;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  });
+}
+
 function updateBall() {
   ball.x += ball.vx;
   ball.y += ball.vy;
@@ -62,7 +73,9 @@ function updateBall() {
     const angle = Math.atan2(dy, dx);
     const px = cx + Math.cos(angle) * radius;
     const py = cy + Math.sin(angle) * radius;
-    lines.push({ x: ball.x, y: ball.y, tx: px, ty: py, color: colors[Math.floor(Math.random() * colors.length)] });
+
+    // Save line from ball to collision point
+    lines.push({ ox: ball.x, oy: ball.y, tx: px, ty: py, color: colors[Math.floor(Math.random() * colors.length)] });
 
     // Reflect ball velocity
     const normalAngle = angle;
@@ -77,17 +90,6 @@ function updateBall() {
     ball.x = cx + Math.cos(angle) * (radius - ballRadius);
     ball.y = cy + Math.sin(angle) * (radius - ballRadius);
   }
-}
-
-function drawLines() {
-  lines.forEach(line => {
-    ctx.beginPath();
-    ctx.moveTo(line.x, line.y);
-    ctx.lineTo(line.tx, line.ty);
-    ctx.strokeStyle = line.color;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-  });
 }
 
 function animate() {

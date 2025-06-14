@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>এলোপাথাড়ি বল ও কেন্দ্রীয় রেখা</title>
+  <title>Glow Circle with Colorful Rays</title>
   <style>
     body {
       margin: 0;
@@ -14,9 +14,8 @@
     }
 
     canvas {
-      background: #111;
-      border-radius: 50%;
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+      background: transparent;
+      display: block;
     }
   </style>
 </head>
@@ -28,30 +27,35 @@
     const ctx = canvas.getContext("2d");
     const w = canvas.width;
     const h = canvas.height;
+
     const center = { x: w / 2, y: h / 2 };
-    const radius = w / 2 - 10;
+    const radius = w / 2 - 20;
 
     let ball = {
       x: center.x,
       y: center.y,
-      vx: (Math.random() - 0.5) * 6,
-      vy: (Math.random() - 0.5) * 6,
-      r: 6
+      vx: (Math.random() - 0.5) * 4,
+      vy: (Math.random() - 0.5) * 4,
+      r: 4
     };
 
     let lines = [];
 
     function getRandomColor() {
       const hue = Math.floor(Math.random() * 360);
-      return `hsl(${hue}, 100%, 50%)`;
+      return `hsl(${hue}, 100%, 70%)`;
     }
 
-    function drawCircle() {
+    function drawCircleGlow() {
+      // Glow circle
       ctx.beginPath();
       ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = "#333";
-      ctx.lineWidth = 4;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = "rgba(255,255,255,0.6)";
+      ctx.strokeStyle = "#ffffcc";
+      ctx.lineWidth = 2;
       ctx.stroke();
+      ctx.shadowBlur = 0;
     }
 
     function drawBall() {
@@ -77,17 +81,24 @@
         ball.vx -= 2 * dot * normX;
         ball.vy -= 2 * dot * normY;
 
-        // Add new line from wall to ball position
+        // Add randomness to direction
+        const angleOffset = (Math.random() - 0.5) * 0.5;
+        const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+        const angle = Math.atan2(ball.vy, ball.vx) + angleOffset;
+        ball.vx = Math.cos(angle) * speed;
+        ball.vy = Math.sin(angle) * speed;
+
+        // Add line from edge to center
         lines.push({
           fromX: ball.x,
           fromY: ball.y,
-          toX: ball.x,  // সব রেখা বলের বর্তমান অবস্থানে যাবে
-          toY: ball.y,
+          toX: center.x,
+          toY: center.y,
           color: getRandomColor()
         });
 
-        // Keep last 80 lines
-        if (lines.length > 80) lines.shift();
+        // Limit line count
+        if (lines.length > 30) lines.shift();
       }
     }
 
@@ -95,16 +106,19 @@
       for (let line of lines) {
         ctx.beginPath();
         ctx.moveTo(line.fromX, line.fromY);
-        ctx.lineTo(ball.x, ball.y); // সব লাইন বলের বর্তমান অবস্থানে এসে মিলবে
+        ctx.lineTo(line.toX, line.toY);
         ctx.strokeStyle = line.color;
-        ctx.lineWidth = 3.5; // মোটা রেখা
+        ctx.lineWidth = 3.5;
+        ctx.shadowColor = line.color;
+        ctx.shadowBlur = 10;
         ctx.stroke();
+        ctx.shadowBlur = 0;
       }
     }
 
     function animate() {
       ctx.clearRect(0, 0, w, h);
-      drawCircle();
+      drawCircleGlow();
       drawLines();
       drawBall();
       updateBall();

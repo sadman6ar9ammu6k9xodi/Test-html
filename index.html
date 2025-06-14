@@ -1,185 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MAHBUBU ULLASH Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mahbubu Ullash | Developer Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-color: linear-gradient(to right, #6dd5fa, #2980b9);
-      --card-bg: #ffffff;
-      --text-color: #2c3e50;
-      --button-bg: #2980b9;
-      --link-color: #ffffff;
-    }
-
-    [data-theme="dark"] {
-      --bg-color: linear-gradient(to right, #1e1e1e, #000000);
-      --card-bg: #2b2b2b;
-      --text-color: #f0f0f0;
-      --button-bg: #444;
-      --link-color: #cccccc;
-    }
-
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
+      font-family: 'Roboto', sans-serif;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+    .dark-mode {
+      background: #121212;
+      color: #fff;
+    }
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: radial-gradient(#00f2ff33 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: moveBg 20s linear infinite;
+    }
+    @keyframes moveBg {
+      from { background-position: 0 0; }
+      to { background-position: 100px 100px; }
+    }
+    header {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
       align-items: center;
-      min-height: 100vh;
-      transition: all 0.5s ease;
     }
-
-    .top-bar {
-      width: 100%;
-      text-align: right;
-      padding: 10px 20px;
-    }
-
-    .mode-toggle {
-      background: transparent;
-      border: 2px solid var(--button-bg);
-      padding: 5px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      color: var(--button-bg);
-      transition: all 0.3s ease;
-    }
-
-    .mode-toggle:hover {
-      background-color: var(--button-bg);
+    .toggle-dark {
+      background: #0077cc;
       color: white;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border-radius: 20px;
-      padding: 30px;
-      text-align: center;
-      max-width: 320px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      margin-top: 10px;
-      animation: fadeIn 1.5s ease;
-    }
-
-    .card img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--button-bg);
-    }
-
-    .card h2 {
-      margin: 15px 0 5px;
-      font-size: 24px;
-    }
-
-    .card p {
-      margin: 5px 0 20px;
-      font-size: 14px;
-    }
-
-    .card a.button {
-      padding: 10px 20px;
       border: none;
-      border-radius: 25px;
-      background-color: var(--button-bg);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .card {
+      background: white;
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dark-mode .card {
+      background: #1e1e1e;
+    }
+    .card img {
+      width: 130px;
+      border-radius: 50%;
+      border: 3px solid #00f2ff;
+    }
+    .typed-text {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #00aaff;
+    }
+    .contact-btn {
+      background: #007bff;
       color: white;
-      font-size: 16px;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
       text-decoration: none;
       display: inline-block;
-      margin-bottom: 10px;
+      margin: 1rem 0;
     }
-
-    #clock {
-      font-size: 16px;
-      margin-bottom: 10px;
+    .video {
+      display: block;
+      max-width: 95%;
+      margin: 1rem auto;
+      border-radius: 20px;
     }
-
-    .video-container {
-      margin-top: 20px;
-      width: 90%;
-      max-width: 500px;
-    }
-
-    .video-container video {
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-
-    .links {
-      margin: 20px 0;
+    .social {
       text-align: center;
+      margin: 1.5rem auto;
     }
-
-    .links a {
-      margin: 0 15px;
+    .social a {
+      margin: 0 1rem;
       text-decoration: none;
-      font-size: 18px;
-      color: var(--link-color);
+      color: #0077cc;
       font-weight: bold;
-      transition: color 0.3s;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .about, .subscribe, .projects {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: rgba(255,255,255,0.8);
+      border-radius: 10px;
+    }
+    .dark-mode .about,
+    .dark-mode .subscribe,
+    .dark-mode .projects {
+      background: rgba(40,40,40,0.8);
+    }
+    .subscribe input {
+      padding: 0.5rem;
+      width: 70%;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .subscribe button {
+      padding: 0.5rem 1rem;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .status {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: green;
+      color: white;
+      font-size: 0.8rem;
     }
   </style>
 </head>
 <body>
+  <div class="bg-animation"></div>
+  <header>
+    <h2>Mahbubu Ullash</h2>
+    <button class="toggle-dark" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+  </header>  <div class="card">
+    <img src="https://i.imgur.com/lErbLcI.jpeg" alt="Mahbubu Ullash">
+    <h2>MAHBUBU ULLASH <span class="status">● Online</span></h2>
+    <p><span class="typed-text"></span></p>
+    <a class="contact-btn" href="https://m.me/61558029693194" target="_blank">Contact Me</a>
+    <p id="datetime"></p>
+  </div><video class="video" src="https://files.catbox.moe/oq9wm9.mp4" autoplay loop controls></video>
 
-  <div class="top-bar">
-    <button class="mode-toggle" onclick="toggleMode()">🌙 Toggle Dark Mode</button>
-  </div>
-
-  <div class="card">
-    <img src="https://i.imgur.com/lErbLcI.jpeg" alt="MAHBUBU ULLASH" />
-    <h2>MAHBUBU ULLASH</h2>
-    <p>Developer | Bot Maker | Technology Enthusiast</p>
-    <a class="button" href="https://m.me/61558029693194" target="_blank">Contact Me</a>
-    <div id="clock"></div>
-  </div>
-
-  <div class="video-container">
-    <video autoplay loop controls>
-      <source src="https://files.catbox.moe/oq9wm9.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-
-  <div class="links">
+  <div class="social">
     <a href="https://www.facebook.com/share/16mA3zxsrM/" target="_blank">Facebook</a>
     <a href="https://github.com/cyber-ullash" target="_blank">GitHub</a>
     <a href="https://t.me/The_morning_star71" target="_blank">Telegram</a>
-  </div>
+  </div>  <div class="about">
+    <h3>🧑‍💻 About Me</h3>
+    <p>I am Mahbubu Ullash, a passionate bot developer and tech enthusiast from Bangladesh. I build intelligent Telegram and Messenger bots and love automation.</p>
+  </div>  <div class="subscribe">
+    <h3>📧 Subscribe to get updates</h3>
+    <input type="email" placeholder="Enter your email">
+    <button>Subscribe</button>
+  </div>  <script>
+    const texts = ["Developer", "Bot Maker", "Technology Enthusiast"];
+    let i = 0, j = 0, isDeleting = false;
 
-  <script>
-    function updateClock() {
-      const clock = document.getElementById("clock");
+    function type() {
+      const element = document.querySelector(".typed-text");
+      if (!element) return;
+      let current = texts[i];
+      if (isDeleting) {
+        element.textContent = current.substring(0, j--);
+      } else {
+        element.textContent = current.substring(0, j++);
+      }
+      if (!isDeleting && j === current.length) {
+        isDeleting = true;
+        setTimeout(type, 1000);
+      } else if (isDeleting && j === 0) {
+        isDeleting = false;
+        i = (i + 1) % texts.length;
+        setTimeout(type, 500);
+      } else {
+        setTimeout(type, 100);
+      }
+    }
+    type();
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    function updateDateTime() {
       const now = new Date();
-      const options = {
-        weekday: 'long', year: 'numeric', month: 'short',
-        day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
-      };
-      clock.textContent = now.toLocaleDateString("en-US", options);
+      document.getElementById("datetime").textContent = now.toLocaleString();
     }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    function toggleMode() {
-      const currentTheme = document.documentElement.getAttribute("data-theme");
-      document.documentElement.setAttribute("data-theme", currentTheme === "dark" ? "light" : "dark");
-    }
-
-    document.documentElement.setAttribute("data-theme", "light");
-  </script>
-
-</body>
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+  </script></body>
 </html>

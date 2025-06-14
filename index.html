@@ -2,129 +2,129 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>Dynamic Ball Lines</title>
+  <title>Animated Circle Lines</title>
   <style>
     body {
       margin: 0;
-      background: black;
+      background-color: black;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
     canvas {
-      background: transparent;
       display: block;
+      background-color: transparent;
     }
   </style>
 </head>
 <body>
 <canvas id="canvas" width="500" height="500"></canvas>
-
 <script>
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-  const w = canvas.width;
-  const h = canvas.height;
-  const center = { x: w / 2, y: h / 2 };
-  const radius = w / 2 - 20;
+const w = canvas.width;
+const h = canvas.height;
+const center = { x: w / 2, y: h / 2 };
+const radius = w / 2 - 20;
 
-  const ball = {
-    x: center.x,
-    y: center.y,
-    r: 4,
-    vx: (Math.random() - 0.5) * 4,
-    vy: (Math.random() - 0.5) * 4
-  };
+const ball = {
+  x: center.x,
+  y: center.y,
+  r: 5,
+  vx: (Math.random() - 0.5) * 4,
+  vy: (Math.random() - 0.5) * 4
+};
 
-  const lines = [];
+const lines = [];
 
-  function getRandomColor() {
-    const hue = Math.floor(Math.random() * 360);
-    return `hsl(${hue}, 100%, 70%)`;
-  }
+function getRandomColor() {
+  const hue = Math.floor(Math.random() * 360);
+  return `hsl(${hue}, 100%, 65%)`;
+}
 
-  function drawCircle() {
+function drawCircle() {
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#ffffcc";
+  ctx.shadowColor = "#ffffcc";
+  ctx.shadowBlur = 10;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+}
+
+function drawBall() {
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+}
+
+function drawLines() {
+  for (let line of lines) {
     ctx.beginPath();
-    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = "#ffffcc";
-    ctx.strokeStyle = "#ffffcc";
-    ctx.lineWidth = 2;
+    ctx.moveTo(line.fromX, line.fromY);
+    ctx.lineTo(line.toX, line.toY);
+    ctx.strokeStyle = line.color;
+    ctx.lineWidth = 4;
+    ctx.shadowColor = line.color;
+    ctx.shadowBlur = 12;
     ctx.stroke();
     ctx.shadowBlur = 0;
   }
+}
 
-  function drawBall() {
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
-    ctx.fill();
+function updateBall() {
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+
+  const dx = ball.x - center.x;
+  const dy = ball.y - center.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  if (dist + ball.r >= radius) {
+    // Impact point on the circle's edge
+    const normX = dx / dist;
+    const normY = dy / dist;
+    const impactX = center.x + normX * radius;
+    const impactY = center.y + normY * radius;
+
+    // Add line from current ball to impact point
+    lines.push({
+      fromX: ball.x,
+      fromY: ball.y,
+      toX: impactX,
+      toY: impactY,
+      color: getRandomColor()
+    });
+
+    if (lines.length > 40) lines.shift(); // Limit number of lines
+
+    // Reflect velocity (simple bounce)
+    const dot = ball.vx * normX + ball.vy * normY;
+    ball.vx -= 2 * dot * normX;
+    ball.vy -= 2 * dot * normY;
+
+    // Add a small random angle for more natural motion
+    const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+    const angle = Math.atan2(ball.vy, ball.vx) + (Math.random() - 0.5) * 0.5;
+    ball.vx = Math.cos(angle) * speed;
+    ball.vy = Math.sin(angle) * speed;
   }
+}
 
-  function updateBall() {
-    ball.x += ball.vx;
-    ball.y += ball.vy;
+function animate() {
+  ctx.clearRect(0, 0, w, h);
+  drawCircle();
+  drawLines();
+  drawBall();
+  updateBall();
+  requestAnimationFrame(animate);
+}
 
-    const dx = ball.x - center.x;
-    const dy = ball.y - center.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist + ball.r >= radius) {
-      const normX = dx / dist;
-      const normY = dy / dist;
-      const dot = ball.vx * normX + ball.vy * normY;
-      ball.vx -= 2 * dot * normX;
-      ball.vy -= 2 * dot * normY;
-
-      // random angle adjustment
-      const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
-      const angleOffset = (Math.random() - 0.5) * 0.5;
-      const angle = Math.atan2(ball.vy, ball.vx) + angleOffset;
-      ball.vx = Math.cos(angle) * speed;
-      ball.vy = Math.sin(angle) * speed;
-
-      // calculate impact point
-      const impactX = center.x + normX * radius;
-      const impactY = center.y + normY * radius;
-
-      lines.push({
-        fromX: ball.x,
-        fromY: ball.y,
-        toX: impactX,
-        toY: impactY,
-        color: getRandomColor()
-      });
-
-      if (lines.length > 40) lines.shift(); // max 40 lines
-    }
-  }
-
-  function drawLines() {
-    for (let line of lines) {
-      ctx.beginPath();
-      ctx.moveTo(line.fromX, line.fromY);
-      ctx.lineTo(line.toX, line.toY);
-      ctx.strokeStyle = line.color;
-      ctx.lineWidth = 3.5;
-      ctx.shadowColor = line.color;
-      ctx.shadowBlur = 10;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-    }
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, w, h);
-    drawCircle();
-    drawLines();
-    drawBall();
-    updateBall();
-    requestAnimationFrame(animate);
-  }
-
-  animate();
+animate();
 </script>
 </body>
 </html>

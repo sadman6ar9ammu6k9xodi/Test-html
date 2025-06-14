@@ -1,12 +1,13 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bouncing Ball with Color Trails</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ball Bounce Trail</title>
   <style>
     body {
       margin: 0;
-      background: black;
+      background-color: black;
       overflow: hidden;
     }
     canvas {
@@ -16,93 +17,103 @@
 </head>
 <body>
   <canvas id="canvas"></canvas>
+
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;const cx = canvas.width / 2;
-const cy = canvas.height / 2;
-const radius = 200;
-const ballRadius = 5;
+    canvas.height = window.innerHeight;
 
-let ball = {
-  x: cx,
-  y: cy,
-  vx: 2 + Math.random() * 3,
-  vy: 2 + Math.random() * 3
-};
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 250;
 
-let lines = [];
-const colors = ["red", "lime", "cyan", "yellow", "magenta", "orange", "aqua", "violet"];
+    let ball = {
+      x: centerX,
+      y: centerY,
+      vx: 3,
+      vy: 2.5,
+      size: 6,
+      color: "white"
+    };
 
-function drawCircle() {
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
-  ctx.strokeStyle = "#ffff99";
-  ctx.lineWidth = 3;
-  ctx.stroke();
-}
+    let lines = [];
 
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ballRadius, 0, 2 * Math.PI);
-  ctx.fillStyle = "white";
-  ctx.fill();
-}
+    function randomColor() {
+      const colors = ["#ff007f", "#00ffff", "#00ff00", "#ff0000", "#ffcc00", "#ff66ff"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
 
-function drawLines() {
-  lines.forEach(line => {
-    ctx.beginPath();
-    ctx.moveTo(line.ox, line.oy);
-    ctx.lineTo(line.tx, line.ty);
-    ctx.strokeStyle = line.color;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-  });
-}
+    function drawCircle() {
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = "yellow";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
 
-function updateBall() {
-  ball.x += ball.vx;
-  ball.y += ball.vy;
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
+      ctx.fillStyle = ball.color;
+      ctx.fill();
+    }
 
-  const dx = ball.x - cx;
-  const dy = ball.y - cy;
-  const dist = Math.sqrt(dx * dx + dy * dy);
+    function update() {
+      const dx = ball.x - centerX;
+      const dy = ball.y - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-  if (dist >= radius - ballRadius) {
-    const angle = Math.atan2(dy, dx);
-    const px = cx + Math.cos(angle) * radius;
-    const py = cy + Math.sin(angle) * radius;
+      // Check for collision with the circle boundary
+      if (distance + ball.size >= radius) {
+        // Calculate collision point on circle
+        const angle = Math.atan2(dy, dx);
+        const edgeX = centerX + radius * Math.cos(angle);
+        const edgeY = centerY + radius * Math.sin(angle);
 
-    // Save line from ball to collision point
-    lines.push({ ox: ball.x, oy: ball.y, tx: px, ty: py, color: colors[Math.floor(Math.random() * colors.length)] });
+        // Draw line from collision point to ball's current position
+        lines.push({
+          x1: edgeX,
+          y1: edgeY,
+          x2: ball.x,
+          y2: ball.y,
+          color: randomColor()
+        });
 
-    // Reflect ball velocity
-    const normalAngle = angle;
-    const incidenceAngle = Math.atan2(ball.vy, ball.vx);
-    const reflectAngle = 2 * normalAngle - incidenceAngle + Math.PI;
+        // Reflect velocity (bounce effect)
+        const normX = dx / distance;
+        const normY = dy / distance;
+        const dot = ball.vx * normX + ball.vy * normY;
+        ball.vx -= 2 * dot * normX;
+        ball.vy -= 2 * dot * normY;
+      }
 
-    const speed = Math.sqrt(ball.vx ** 2 + ball.vy ** 2);
-    ball.vx = speed * Math.cos(reflectAngle);
-    ball.vy = speed * Math.sin(reflectAngle);
+      // Move ball
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+    }
 
-    // Push ball slightly back inside
-    ball.x = cx + Math.cos(angle) * (radius - ballRadius);
-    ball.y = cy + Math.sin(angle) * (radius - ballRadius);
-  }
-}
+    function drawLines() {
+      for (let line of lines) {
+        ctx.beginPath();
+        ctx.moveTo(line.x1, line.y1);
+        ctx.lineTo(line.x2, line.y2);
+        ctx.strokeStyle = line.color;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+    }
 
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawCircle();
-  drawLines();
-  updateBall();
-  drawBall();
-  requestAnimationFrame(animate);
-}
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawCircle();
+      drawLines();
+      drawBall();
+      update();
+      requestAnimationFrame(animate);
+    }
 
-animate();
-
+    animate();
   </script>
 </body>
 </html>

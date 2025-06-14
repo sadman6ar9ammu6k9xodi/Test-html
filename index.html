@@ -2,35 +2,114 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>Infinity Circle Animation</title>
+  <title>বাউন্সিং বল এনিমেশন</title>
   <style>
     body {
       margin: 0;
-      background-color: #000;
+      background: #000;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
     }
 
-    .circle {
-      width: 320px;
-      height: 320px;
+    canvas {
+      background: #111;
       border-radius: 50%;
-      background: linear-gradient(45deg, #ffe800, #ff007e, #00ffe7, #6b00ff);
-      background-size: 400% 400%;
-      animation: moveColors 8s linear infinite;
-      box-shadow: 0 0 40px rgba(255,255,255,0.3);
-    }
-
-    @keyframes moveColors {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
 <body>
-  <div class="circle"></div>
+  <canvas id="canvas" width="500" height="500"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const center = { x: w / 2, y: h / 2 };
+    const radius = w / 2 - 10;
+
+    let ball = {
+      x: center.x,
+      y: center.y,
+      vx: 2.5,
+      vy: 2,
+      r: 5
+    };
+
+    let lines = [];
+
+    function getRandomColor() {
+      const hue = Math.floor(Math.random() * 360);
+      return `hsl(${hue}, 100%, 50%)`;
+    }
+
+    function drawCircle() {
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = "#333";
+      ctx.lineWidth = 5;
+      ctx.stroke();
+    }
+
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+    }
+
+    function updateBall() {
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      const dx = ball.x - center.x;
+      const dy = ball.y - center.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist + ball.r >= radius) {
+        // Reflect
+        const normX = dx / dist;
+        const normY = dy / dist;
+        const dot = ball.vx * normX + ball.vy * normY;
+        ball.vx -= 2 * dot * normX;
+        ball.vy -= 2 * dot * normY;
+
+        // Add a line from center to contact point
+        lines.push({
+          x: ball.x,
+          y: ball.y,
+          color: getRandomColor()
+        });
+
+        // Optional: limit number of lines
+        if (lines.length > 50) lines.shift();
+      }
+    }
+
+    function drawLines() {
+      for (let line of lines) {
+        ctx.beginPath();
+        ctx.moveTo(center.x, center.y);
+        ctx.lineTo(line.x, line.y);
+        ctx.strokeStyle = line.color;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      drawCircle();
+      drawLines();
+      drawBall();
+      updateBall();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
 </body>
 </html>
